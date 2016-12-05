@@ -44,7 +44,6 @@ describe 'ExUnit syntax' do
     end
     EOF
   end
-
   it 'on_exit macro' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitMacro', 'on_exit')
     setup_all do
@@ -60,7 +59,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'assert ' do
+  it 'assert' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'assert')
     test 'that stuff works' do
       assert true
@@ -68,7 +67,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'assert_in_delta ' do
+  it 'assert_in_delta' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'assert_in_delta')
     test 'that stuff works' do
       assert_in_delta true
@@ -76,7 +75,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'assert_raise ' do
+  it 'assert_raise' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'assert_raise')
     test 'that stuff works' do
       assert_raise true
@@ -84,7 +83,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'assert_receive ' do
+  it 'assert_receive' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'assert_receive')
     test 'that stuff works' do
       assert_receive true
@@ -92,8 +91,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-
-  it 'assert_received ' do
+  it 'assert_received' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'assert_received')
     test 'that stuff works' do
       assert_received true
@@ -101,7 +99,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'catch_error ' do
+  it 'catch_error' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'catch_error')
     test 'that stuff works' do
       catch_error true
@@ -109,7 +107,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'catch_exit ' do
+  it 'catch_exit' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'catch_exit')
     test 'that stuff works' do
       catch_exit true
@@ -117,7 +115,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'catch_throw ' do
+  it 'catch_throw' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'catch_throw')
     test 'that stuff works' do
       catch_throw true
@@ -125,7 +123,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'flunk ' do
+  it 'flunk' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'flunk')
     test 'that stuff works' do
       flunk true
@@ -133,7 +131,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'refute ' do
+  it 'refute' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'refute')
     test 'that stuff works' do
       refute true
@@ -141,7 +139,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'refute_in_delta ' do
+  it 'refute_in_delta' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'refute_in_delta')
     test 'that stuff works' do
       refute_in_delta true
@@ -149,7 +147,7 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'refute_receive ' do
+  it 'refute_receive' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'refute_receive')
     test 'that stuff works' do
       refute_receive true
@@ -157,13 +155,11 @@ describe 'ExUnit syntax' do
     EOF
   end
 
-  it 'refute_received ' do
+  it 'refute_received' do
     expect(<<~EOF).to include_elixir_syntax('elixirExUnitAssert', 'refute_received')
     test 'that stuff works' do
       refute_received true
     end
     EOF
   end
-
-
 end
