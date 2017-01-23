@@ -5,6 +5,8 @@ require 'tmpdir'
 require 'vimrunner'
 require 'vimrunner/rspec'
 
+require 'pry'
+
 class Buffer
   def initialize(vim, type)
     @file = ".fixture.#{type}"
@@ -15,6 +17,15 @@ class Buffer
     with_file content do
       # remove all indentation
       @vim.normal 'ggVG999<<'
+      # force vim to indent the file
+      @vim.normal 'gg=G'
+      # save the changes
+      sleep 0.1 if ENV['CI']
+    end
+  end
+
+  def reindent_random(content)
+    with_file content do
       # force vim to indent the file
       @vim.normal 'gg=G'
       # save the changes
@@ -111,12 +122,17 @@ end
     buffer = Buffer.new(VIM, type)
 
     match do |code|
-      buffer.reindent(code) == code
+      @new_code = code.split(/\n/).map{|x| " " * Random.rand(16) + x} .join("\n")
+      @new_code = code
+      buffer.reindent(@new_code) == code
     end
 
     failure_message do |code|
       <<~EOM
-      #{Differ.diff(buffer.reindent(code), code)}
+      randomized input: 
+      #{@new_code}
+
+      #{Differ.diff(buffer.reindent_random(@newcode), code)}
       EOM
     end
   end
