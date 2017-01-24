@@ -33,6 +33,15 @@ class Buffer
     end
   end
 
+  def reindent_line(content, line)
+    with_file content do
+      # force vim to indent the file
+      @vim.normal "#{line}G=="
+      # save the changes
+      sleep 0.1 if ENV['CI']
+    end
+  end
+
   def type(content)
     with_file do
       @vim.normal 'gg'
@@ -121,19 +130,41 @@ end
   RSpec::Matchers.define matcher do
     buffer = Buffer.new(VIM, type)
 
+
     match do |code|
-      @new_code = code.split(/\n/).map{|x| " " * Random.rand(16) + x} .join("\n")
-      @new_code = code
-      buffer.reindent(@new_code) == code
+      @failures = []
+      if buffer.reindent(code) != code
+        @failures.push(["reindent", buffer.reindent(code), code ])
+      end
+
+      new_code = code.split(/\n/).map{|x| (" " * Random.rand(16)) + (x.strip)} .join("\n")
+      if buffer.reindent(new_code) != code
+        @failures.push(["reindent_randomized", buffer.reindent(new_code), code ])
+      end
+
+      code.split(/\n/).each_with_index {|line, idx|
+        new_code = code.split(/\n/)
+        new_code[idx] = (" " * Random.rand(16)) + (new_code[idx].strip)
+        new_code = new_code.join("\n")
+        reindented = buffer.reindent_line(new_code, idx+1)
+        if reindented != code
+          @failures.push(["reindent_line_#{idx+1}", reindented, code ])
+        end
+      }
+
+      @failures == []
     end
 
     failure_message do |code|
-      <<~EOM
-      randomized input: 
-      #{@new_code}
+      @failures.collect {|x|
+        msg, wrong, right = x
 
-      #{Differ.diff(buffer.reindent_random(@newcode), code)}
-      EOM
+        <<~EOM
+        #{msg}
+
+        #{Differ.diff(wrong, right)}
+        EOM
+      }.join("\n")
     end
   end
 end
