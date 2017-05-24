@@ -44,7 +44,15 @@ endfunction
 " Returns 0 or 1 based on whether or not the given line number and column
 " number pair is a string or comment
 function! elixir#indent#is_string_or_comment(line, col)
-  return synIDattr(synID(a:line, a:col, 1), "name") =~ '\%(String\|Comment\)'
+  let cached_value = s:get_cache_element(a:line, a:col)
+
+  if cached_value != -1
+    return cached_value
+  else
+    let value = synIDattr(synID(a:line, a:col, 1), "name") =~ '\%(String\|Comment\)'
+    call s:set_cache_element(a:line, a:col, value)
+    return value
+  endif
 endfunction
 
 " Skip expression for searchpair. Returns 0 or 1 based on whether the value
@@ -381,4 +389,56 @@ function! elixir#indent#handle_inside_generic_block(lnum, _text, prev_nb_lnum, p
   else
     return -1
   endif
+endfunction
+
+let b:cache_is_string_or_comment = []
+function! s:ensure_cache_len(element_count)
+  " we will overallocate array, but not more that 2*x lines count, so don't
+  " care that much
+  let elements = range(0, a:element_count)
+  call map(elements, "0")
+  call extend(b:cache_is_string_or_comment, elements)
+endfunction
+
+function! s:get_cache_element(line, col)
+  if (len(b:cache_is_string_or_comment) > a:line)
+    let cache_element = b:cache_is_string_or_comment[a:line]
+
+    if type(cache_element) == 0
+      " cache filled with 0, so this line was never cached yet
+      let b:cache_is_string_or_comment[a:line] = {}
+      return -1
+    else
+      if has_key(b:cache_is_string_or_comment[a:line], a:col)
+        return b:cache_is_string_or_comment[a:line][a:col]
+      else
+        return -1
+      endif
+    endif
+  else
+    call s:ensure_cache_len(a:line)
+    let b:cache_is_string_or_comment[a:line] = {}
+    return -1
+  endif
+endfunction
+
+function! s:set_cache_element(line, col, value)
+  " we expect cache to be big enough already here
+  " which means s:get_cache_element was called before
+  "
+  " we expect that s:get_cache_element also filled line element with
+  " dictionary, so this call is safe to do without any checks
+  let b:cache_is_string_or_comment[a:line][a:col] = a:value
+endfunction
+
+function! elixir#indent#reset_indent_cache()
+  call elixir#indent#reset_indent_cache1()
+endfunction
+
+function! elixir#indent#reset_indent_cache1()
+  let line = line(".")
+
+  if (len(b:cache_is_string_or_comment) > line)
+    let b:cache_is_string_or_comment = b:cache_is_string_or_comment[0:line-1]
+  end
 endfunction
