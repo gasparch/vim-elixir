@@ -438,6 +438,10 @@ endfunction
 function! elixir#indent#reset_indent_cache1()
   let line = line(".")
 
+  if !exists("b:cache_is_string_or_comment")
+    let b:cache_is_string_or_comment = []
+  endif
+
   if (len(b:cache_is_string_or_comment) > line)
     let b:cache_is_string_or_comment = b:cache_is_string_or_comment[0:line-1]
   end
