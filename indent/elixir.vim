@@ -10,8 +10,8 @@ setlocal indentkeys+=0=end,0=catch,0=rescue,0=after,0=else,0=do,*<Return>,=->,0}
 
 augroup ElixirIndent
   autocmd! 
-  au! BufEnter                 * call elixir#indentcache#init()
-  au! TextChanged,TextChangedI * call elixir#indentcache#invalidate()
+  au! BufEnter                 <buffer> call elixir#indentcache#init()
+  au! TextChanged,TextChangedI <buffer> call elixir#indentcache#invalidate()
 augroup END
 
 function! elixir#indent(lnum)

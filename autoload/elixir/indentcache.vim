@@ -21,7 +21,7 @@ function! elixir#indentcache#invalidate() " {{{
   " in array.
   if (len(b:elixir_indent_cache) > line)
     let b:elixir_indent_cache = b:elixir_indent_cache[0:line-1]
-  end
+  endif
 endfunction " }}}
 
 " get_cache_element() retrieves element from cache or returns s:UNCACHED_ID if
