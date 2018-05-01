@@ -1,6 +1,6 @@
 # vim-elixir
 
-[![Build Status](https://travis-ci.org/elixir-lang/vim-elixir.svg?branch=master)](https://travis-ci.org/elixir-lang/vim-elixir)
+[![Build Status](https://travis-ci.org/elixir-editors/vim-elixir.svg?branch=master)](https://travis-ci.org/elixir-editors/vim-elixir)
 
 [Elixir](http://elixir-lang.org) support for vim. This plugin also adds support
 for Elixir's templating language, EEx.
@@ -10,7 +10,6 @@ Features included so far:
 * Syntax highlighting for Elixir and EEx
 * Filetype detection for `.ex`, `.exs` and `.eex` files
 * Automatic indentation
-
 
 ## Installation
 
@@ -31,8 +30,10 @@ each plugin. In general, you have to add a line to your `~/.vimrc`:
 ```viml
 " vim-plug
 Plug 'elixir-editors/vim-elixir'
+
 " NeoBundle
 NeoBundle 'elixir-editors/vim-elixir'
+
 " Vundle
 Plugin 'elixir-editors/vim-elixir'
 ```
@@ -42,29 +43,15 @@ Plugin 'elixir-editors/vim-elixir'
 Run [./manual_install.sh](manual_install.sh) to copy the contents of each directory in the respective directories inside
 `~/.vim`.
 
+## `mix format` Integration
 
-## Syntastic integration
+We've decided not to include `mix format` integration into `vim-elixir`. If you'd like to set it up yourself, you have the following options:
 
-> :warning: **Warning:** older versions (`<= 3.4.0-106`) of
-> [Syntastic][syntastic] check Elixir scripts *by executing them*. In addition
-> to being unsafe, this can cause Vim to hang while saving Elixir scripts. This
-> is not an error in `vim-elixir`. This issue [can be fixed in
-> Syntastic][syntastic-issue-fix] by disabling Elixir checking by default.
->
-> **If your version of Syntastic is below `3.4.0-107` (16 July 2014), you should
-> update to a newer version.**
->
-> You can check your version by running `:echo g:_SYNTASTIC_VERSION`
-
-[vim-plug]: https://github.com/junegunn/vim-plug
-[vundle]: https://github.com/VundleVim/Vundle.vim
-[neobundle]: https://github.com/Shougo/neobundle.vim
-[pathogen]: https://github.com/tpope/vim-pathogen
-[syntastic]: https://github.com/scrooloose/syntastic
-[syntastic-issue-fix]: https://github.com/scrooloose/syntastic/commit/1d19dff701524ebed90a4fbd7c7cd75ab954b79d
+* For asynchronous execution of the formatter, have a look at [vim-mix-format](https://github.com/mhinz/vim-mix-format)
+* Add it as a `formatprg` (e.g. `set formatprg=mix\ format\ -`)
 
 ## Development
 
-To run the tests you can run `bundle exec rspec`
+To run the tests you can run `bundle exec parallel_rspec spec`
 
 To spawn an interactive Vim instance with the configs from this repo use `bin/spawn_vim`
